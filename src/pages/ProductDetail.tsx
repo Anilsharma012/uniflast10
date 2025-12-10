@@ -299,6 +299,24 @@ const ProductDetail = () => {
       document.head.appendChild(twitterImage);
     }
     twitterImage.setAttribute("content", imageUrl);
+
+    // Update Twitter title
+    let twitterTitle = document.querySelector('meta[name="twitter:title"]');
+    if (!twitterTitle) {
+      twitterTitle = document.createElement("meta");
+      twitterTitle.setAttribute("name", "twitter:title");
+      document.head.appendChild(twitterTitle);
+    }
+    twitterTitle.setAttribute("content", pageTitle);
+
+    // Update Twitter description
+    let twitterDesc = document.querySelector('meta[name="twitter:description"]');
+    if (!twitterDesc) {
+      twitterDesc = document.createElement("meta");
+      twitterDesc.setAttribute("name", "twitter:description");
+      document.head.appendChild(twitterDesc);
+    }
+    twitterDesc.setAttribute("content", description);
   }, [product, slug]);
 
   // ✅ Verified buyer check (runs AFTER product shown – does not block UI)

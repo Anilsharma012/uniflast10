@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
+import seoInjectionVitePlugin from "./server/vite-plugin-seo-injection.js";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -21,7 +22,11 @@ export default defineConfig(({ mode }) => ({
       },
     },
   },
-  plugins: [react({ jsxRuntime: "automatic" }), mode === "development" && componentTagger()].filter(Boolean),
+  plugins: [
+    react({ jsxRuntime: "automatic" }),
+    mode === "development" && componentTagger(),
+    mode === "development" && seoInjectionVitePlugin(),
+  ].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
