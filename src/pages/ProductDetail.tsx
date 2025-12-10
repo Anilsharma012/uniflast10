@@ -628,8 +628,8 @@ const ProductDetail = () => {
           Back to Shop
         </Link>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-12">
-          <div>
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-6 sm:gap-8 md:gap-12">
+          <div className="min-w-0">
             <ProductImageGallery
               images={product?.images || []}
               productTitle={title}
@@ -639,7 +639,7 @@ const ProductDetail = () => {
             />
           </div>
 
-          <div>
+          <div className="min-w-0">
             <p className="text-xs sm:text-sm text-muted-foreground uppercase tracking-wider mb-2">
               {product.category}
             </p>
