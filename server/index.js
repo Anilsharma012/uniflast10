@@ -61,6 +61,7 @@ const couponsRoutes = require('./routes/coupons');
 const paymentRoutes = require('./routes/payment');
 const trackingRoutes = require('./routes/tracking');
 const shippingRoutes = require('./routes/shipping');
+const seoRoutes = require('./routes/seo');
 
 const app = express();
 const PORT = process.env.PORT || 5055;

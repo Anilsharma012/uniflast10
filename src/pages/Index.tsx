@@ -508,58 +508,16 @@ const Index = () => {
               </Button>
             </Link>
             <Link to="/shop/new-arrivals" className="w-full sm:w-auto">
-              <Button size="lg" variant="outline" className="w-full sm:w-auto">
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-full sm:w-auto"
+              >
                 New Arrivals
               </Button>
             </Link>
           </div>
         </div>
-      </section>
-
-      {/* Feature Rows Section */}
-      <section className="relative overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center opacity-10"
-          style={{ backgroundImage: `url(${heroImg})` }}
-        />
-
-        {!featureRowsLoading && featureRows.length > 0 && (
-          <>
-            {/* ✅ HOODIES */}
-            <FeatureRow
-              image={hoodiesFeatureImg}
-              title={featureRows[0]?.title || "HOODIES"}
-              link={`/shop?category=${encodeURIComponent(
-                featureRows[0]?.title || "HOODIES"
-              )}`}
-              imageAlt={featureRows[0]?.imageAlt}
-              letter="H"
-            />
-
-            {/* ✅ LOWER */}
-            <FeatureRow
-              image={lowerFeatureImg}
-              title={featureRows[1]?.title || "LOWER"}
-              link={`/shop?category=${encodeURIComponent(
-                featureRows[1]?.title || "LOWER"
-              )}`}
-              imageAlt={featureRows[1]?.imageAlt}
-              reverse
-              letter="L"
-            />
-
-            {/* ✅ CO-ORD */}
-            <FeatureRow
-              image={coordFeatureImg}
-              title={featureRows[2]?.title || "CO-ORD"}
-              link={`/shop?category=${encodeURIComponent(
-                featureRows[2]?.title || "CO-ORD"
-              )}`}
-              imageAlt={featureRows[2]?.imageAlt}
-              letter="C"
-            />
-          </>
-        )}
       </section>
 
       {/* Featured Products */}
@@ -612,6 +570,125 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Categories grid with product showcase */}
+      <section className="container mx-auto px-2 sm:px-4 pb-12 sm:pb-24">
+        <div className="text-center mb-8 sm:mb-10">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-black tracking-tighter mb-2 sm:mb-4">
+            Shop by <span className="text-primary">Category</span>
+          </h2>
+        </div>
+
+        {catsLoading ? (
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 sm:gap-6 mb-8 sm:mb-12">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div
+                key={i}
+                className="aspect-square rounded-lg bg-muted/40 animate-pulse"
+              />
+            ))}
+          </div>
+        ) : catsError ? (
+          <div className="text-center text-sm text-muted-foreground mb-12">
+            {catsError}
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 sm:gap-6 mb-8 sm:mb-12">
+            {topCats.map((c) => {
+              const catId = c.slug || c.name || "";
+              const prod = categoryProducts.get(catId);
+              const to = `/collection/${c.slug || slugify(c.name || "")}`;
+
+              return prod ? (
+                <div
+                  key={String(c._id || c.id || c.slug || c.name)}
+                  className="flex flex-col items-center"
+                >
+                  <Link to={to} className="w-full">
+                    <div className="w-full h-36 sm:h-48 md:h-56 lg:h-64 rounded-lg overflow-hidden border border-border bg-card hover:border-primary/50 transition-all duration-300">
+                      <img
+                        src={resolveImage(
+                          prod.image_url ||
+                          (Array.isArray(prod.images)
+                            ? prod.images[0]
+                            : "") ||
+                          "/placeholder.svg"
+                        )}
+                        alt={c.name}
+                        className="w-full h-full object-cover rounded-lg"
+                      />
+                    </div>
+                  </Link>
+                  <div className="mt-2 sm:mt-3 text-[11px] sm:text-sm font-semibold text-center break-words leading-tight px-1">
+                    {c.name}
+                  </div>
+                </div>
+              ) : (
+                <Link
+                  key={String(c._id || c.id || c.slug || c.name)}
+                  to={to}
+                  className="group block rounded-lg border border-border bg-card p-3 sm:p-4 hover:border-primary/50 transition-colors aspect-square flex items-center justify-center"
+                >
+                  <div className="text-center">
+                    <div className="h-12 sm:h-16 w-12 sm:w-16 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center text-lg sm:text-xl font-bold mb-2 sm:mb-3 mx-auto">
+                      {(c.name || "").slice(0, 1)}
+                    </div>
+                    <div className="text-[11px] sm:text-sm font-semibold text-center group-hover:text-primary break-words leading-tight px-1">
+                      {c.name}
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        )}
+      </section>
+
+      {/* Feature Rows Section */}
+      <section className="relative overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-10"
+          style={{ backgroundImage: `url(${heroImg})` }}
+        />
+
+        {!featureRowsLoading && featureRows.length > 0 && (
+          <>
+            {/* ✅ HOODIES */}
+            <FeatureRow
+              image={hoodiesFeatureImg}
+              title={featureRows[0]?.title || "HOODIES"}
+              link={`/shop?category=${encodeURIComponent(
+                featureRows[0]?.title || "HOODIES"
+              )}`}
+              imageAlt={featureRows[0]?.imageAlt}
+              letter="H"
+            />
+
+            {/* ✅ LOWER */}
+            <FeatureRow
+              image={lowerFeatureImg}
+              title={featureRows[1]?.title || "LOWER"}
+              link={`/shop?category=${encodeURIComponent(
+                featureRows[1]?.title || "LOWER"
+              )}`}
+              imageAlt={featureRows[1]?.imageAlt}
+              reverse
+              letter="L"
+            />
+
+            {/* ✅ CO-ORD */}
+            <FeatureRow
+              image={coordFeatureImg}
+              title={featureRows[2]?.title || "CO-ORD"}
+              link={`/shop?category=${encodeURIComponent(
+                featureRows[2]?.title || "CO-ORD"
+              )}`}
+              imageAlt={featureRows[2]?.imageAlt}
+              letter="C"
+            />
+          </>
+        )}
+      </section>
+
       {/* New Arrivals */}
       <section className="container mx-auto px-3 sm:px-4 pb-12 sm:pb-20">
         <div className="text-center mb-8 sm:mb-12">
@@ -653,78 +730,8 @@ const Index = () => {
         )}
       </section>
 
-      {/* Categories grid with product showcase */}
+      {/* From these categories */}
       <section className="container mx-auto px-2 sm:px-4 pb-12 sm:pb-24">
-        <div className="text-center mb-8 sm:mb-10">
-          <h2 className="text-2xl sm:text-3xl md:text-5xl font-black tracking-tighter mb-2 sm:mb-4">
-            Shop by <span className="text-primary">Category</span>
-          </h2>
-        </div>
-
-        {catsLoading ? (
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 sm:gap-6 mb-8 sm:mb-12">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div
-                key={i}
-                className="aspect-square rounded-lg bg-muted/40 animate-pulse"
-              />
-            ))}
-          </div>
-        ) : catsError ? (
-          <div className="text-center text-sm text-muted-foreground mb-12">
-            {catsError}
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 sm:gap-6 mb-8 sm:mb-12">
-            {topCats.map((c) => {
-              const catId = c.slug || c.name || "";
-              const prod = categoryProducts.get(catId);
-              const to = `/collection/${c.slug || slugify(c.name || "")}`;
-
-              return prod ? (
-                <div
-                  key={String(c._id || c.id || c.slug || c.name)}
-                  className="flex flex-col items-center"
-                >
-                  <Link to={to} className="w-full">
-                    <div className="w-full h-36 sm:h-48 md:h-56 lg:h-64 rounded-lg overflow-hidden border border-border bg-card hover:border-primary/50 transition-all duration-300">
-                      <img
-                        src={resolveImage(
-                          prod.image_url ||
-                            (Array.isArray(prod.images)
-                              ? prod.images[0]
-                              : "") ||
-                            "/placeholder.svg"
-                        )}
-                        alt={c.name}
-                        className="w-full h-full object-cover rounded-lg"
-                      />
-                    </div>
-                  </Link>
-                  <div className="mt-2 sm:mt-3 text-[11px] sm:text-sm font-semibold text-center break-words leading-tight px-1">
-                    {c.name}
-                  </div>
-                </div>
-              ) : (
-                <Link
-                  key={String(c._id || c.id || c.slug || c.name)}
-                  to={to}
-                  className="group block rounded-lg border border-border bg-card p-3 sm:p-4 hover:border-primary/50 transition-colors aspect-square flex items-center justify-center"
-                >
-                  <div className="text-center">
-                    <div className="h-12 sm:h-16 w-12 sm:w-16 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center text-lg sm:text-xl font-bold mb-2 sm:mb-3 mx-auto">
-                      {(c.name || "").slice(0, 1)}
-                    </div>
-                    <div className="text-[11px] sm:text-sm font-semibold text-center group-hover:text-primary break-words leading-tight px-1">
-                      {c.name}
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        )}
-
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4 mb-4">
           <h3 className="text-lg sm:text-xl md:text-2xl font-bold tracking-tight">
             From these categories

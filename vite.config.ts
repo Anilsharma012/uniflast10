@@ -10,18 +10,18 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
     proxy: {
       "/api": {
-        target: "http://localhost:5000",
+        target: "http://localhost:5055",
         changeOrigin: true,
         secure: false,
       },
       "/uploads": {
-        target: "http://localhost:5000",
+        target: "http://localhost:5055",
         changeOrigin: true,
         secure: false,
       },
     },
   },
-  plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
+  plugins: [react({ jsxRuntime: "automatic" }), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

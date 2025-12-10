@@ -619,17 +619,18 @@ const ProductDetail = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main className="container mx-auto px-3 sm:px-4 pt-24 pb-12">
-        <Link
-          to="/shop"
-          className="inline-flex items-center text-xs sm:text-sm text-muted-foreground hover:text-foreground mb-6 sm:mb-8"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2 flex-shrink-0" />
-          Back to Shop
-        </Link>
+      <main className="w-full px-3 sm:px-4 pt-24 pb-12">
+        <div className="max-w-7xl mx-auto w-full">
+          <Link
+            to="/shop"
+            className="inline-flex items-center text-xs sm:text-sm text-muted-foreground hover:text-foreground mb-6 sm:mb-8"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2 flex-shrink-0" />
+            Back to Shop
+          </Link>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-12">
-          <div>
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-6 sm:gap-8 md:gap-12 w-full">
+          <div className="min-w-0">
             <ProductImageGallery
               images={product?.images || []}
               productTitle={title}
@@ -639,11 +640,11 @@ const ProductDetail = () => {
             />
           </div>
 
-          <div>
-            <p className="text-xs sm:text-sm text-muted-foreground uppercase tracking-wider mb-2">
+          <div className="min-w-0">
+            <p className="text-xs sm:text-sm text-muted-foreground uppercase tracking-wider mb-2 break-words">
               {product.category}
             </p>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tighter mb-2 sm:mb-4">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tighter mb-2 sm:mb-4 break-words">
               {title}
             </h1>
             <div className="flex items-baseline gap-3 mb-4 sm:mb-6">
@@ -996,9 +997,9 @@ const ProductDetail = () => {
               product?.longDescription) && (
               <div
                 id="details"
-                className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-border"
+                className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-border w-full"
               >
-                <h2 className="text-xl sm:text-2xl font-bold tracking-tighter mb-6 sm:mb-8">
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tighter mb-6 sm:mb-8">
                   Product Details
                 </h2>
 
@@ -1006,7 +1007,7 @@ const ProductDetail = () => {
                   product.highlights.length > 0 && (
                     <div
                       id="highlights"
-                      className="mb-6 sm:mb-8"
+                      className="mb-6 sm:mb-8 w-full"
                     >
                       <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">
                         Highlights
@@ -1033,7 +1034,7 @@ const ProductDetail = () => {
 
                 {product?.specs &&
                   product.specs.length > 0 && (
-                    <div id="specs" className="mb-6 sm:mb-8">
+                    <div id="specs" className="mb-6 sm:mb-8 w-full">
                       <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">
                         Specifications
                       </h3>
@@ -1066,22 +1067,22 @@ const ProductDetail = () => {
                 {product?.longDescription && (
                   <div
                     id="description"
-                    className="mb-6 sm:mb-8"
+                    className="mb-6 sm:mb-8 w-full"
                   >
                     <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">
                       Description
                     </h3>
-                    <div className="text-xs sm:text-sm text-muted-foreground leading-relaxed space-y-2">
+                    <div className="text-xs sm:text-sm text-muted-foreground leading-relaxed space-y-2 w-full">
                       {descriptionExpanded ||
                       product.longDescription.length <=
                         250 ? (
-                        <p className="whitespace-pre-wrap">
+                        <p className="whitespace-pre-wrap break-words">
                           {escapeHtml(
                             product.longDescription
                           )}
                         </p>
                       ) : (
-                        <p className="whitespace-pre-wrap">
+                        <p className="whitespace-pre-wrap break-words">
                           {escapeHtml(
                             product.longDescription.substring(
                               0,
@@ -1121,13 +1122,16 @@ const ProductDetail = () => {
             )}
           </div>
         </div>
+        </div>
 
-        <ReviewsList
-          key={reviewKey}
-          productId={product?._id || product?.id || ""}
-        />
+        <div className="max-w-7xl mx-auto w-full">
+          <ReviewsList
+            key={reviewKey}
+            productId={product?._id || product?.id || ""}
+          />
 
-        <RelatedProducts productId={product?._id || product?.id || ""} />
+          <RelatedProducts productId={product?._id || product?.id || ""} />
+        </div>
       </main>
 
       <ReviewModal
