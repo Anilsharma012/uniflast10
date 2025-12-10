@@ -640,10 +640,10 @@ const ProductDetail = () => {
           </div>
 
           <div className="min-w-0">
-            <p className="text-xs sm:text-sm text-muted-foreground uppercase tracking-wider mb-2">
+            <p className="text-xs sm:text-sm text-muted-foreground uppercase tracking-wider mb-2 break-words">
               {product.category}
             </p>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tighter mb-2 sm:mb-4">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tighter mb-2 sm:mb-4 break-words">
               {title}
             </h1>
             <div className="flex items-baseline gap-3 mb-4 sm:mb-6">
