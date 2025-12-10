@@ -1006,7 +1006,7 @@ const ProductDetail = () => {
                   product.highlights.length > 0 && (
                     <div
                       id="highlights"
-                      className="mb-6 sm:mb-8"
+                      className="mb-6 sm:mb-8 w-full"
                     >
                       <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">
                         Highlights
@@ -1033,7 +1033,7 @@ const ProductDetail = () => {
 
                 {product?.specs &&
                   product.specs.length > 0 && (
-                    <div id="specs" className="mb-6 sm:mb-8">
+                    <div id="specs" className="mb-6 sm:mb-8 w-full">
                       <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">
                         Specifications
                       </h3>
@@ -1066,12 +1066,12 @@ const ProductDetail = () => {
                 {product?.longDescription && (
                   <div
                     id="description"
-                    className="mb-6 sm:mb-8"
+                    className="mb-6 sm:mb-8 w-full"
                   >
                     <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">
                       Description
                     </h3>
-                    <div className="text-xs sm:text-sm text-muted-foreground leading-relaxed space-y-2">
+                    <div className="text-xs sm:text-sm text-muted-foreground leading-relaxed space-y-2 w-full">
                       {descriptionExpanded ||
                       product.longDescription.length <=
                         250 ? (
