@@ -996,9 +996,9 @@ const ProductDetail = () => {
               product?.longDescription) && (
               <div
                 id="details"
-                className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-border"
+                className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-border w-full"
               >
-                <h2 className="text-xl sm:text-2xl font-bold tracking-tighter mb-6 sm:mb-8">
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tighter mb-6 sm:mb-8">
                   Product Details
                 </h2>
 
