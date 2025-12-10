@@ -619,16 +619,17 @@ const ProductDetail = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main className="container mx-auto px-3 sm:px-4 pt-24 pb-12">
-        <Link
-          to="/shop"
-          className="inline-flex items-center text-xs sm:text-sm text-muted-foreground hover:text-foreground mb-6 sm:mb-8"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2 flex-shrink-0" />
-          Back to Shop
-        </Link>
+      <main className="w-full px-3 sm:px-4 pt-24 pb-12">
+        <div className="max-w-7xl mx-auto w-full">
+          <Link
+            to="/shop"
+            className="inline-flex items-center text-xs sm:text-sm text-muted-foreground hover:text-foreground mb-6 sm:mb-8"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2 flex-shrink-0" />
+            Back to Shop
+          </Link>
 
-        <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-6 sm:gap-8 md:gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-6 sm:gap-8 md:gap-12 w-full">
           <div className="min-w-0">
             <ProductImageGallery
               images={product?.images || []}
@@ -1121,13 +1122,16 @@ const ProductDetail = () => {
             )}
           </div>
         </div>
+        </div>
 
-        <ReviewsList
-          key={reviewKey}
-          productId={product?._id || product?.id || ""}
-        />
+        <div className="max-w-7xl mx-auto w-full">
+          <ReviewsList
+            key={reviewKey}
+            productId={product?._id || product?.id || ""}
+          />
 
-        <RelatedProducts productId={product?._id || product?.id || ""} />
+          <RelatedProducts productId={product?._id || product?.id || ""} />
+        </div>
       </main>
 
       <ReviewModal
