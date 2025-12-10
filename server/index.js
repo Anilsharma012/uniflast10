@@ -182,6 +182,12 @@ app.use('/api/payment', paymentRoutes);
 app.use('/api/tracking', trackingRoutes);
 app.use('/api/shipping', shippingRoutes);
 
+/* ------------------- SERVER-SIDE SEO META TAG INJECTION ------------------- */
+// Add this BEFORE starting the server to serve index.html with injected meta tags
+const { seoMetaInjectionMiddleware } = require('./middleware/seoMetaInjection');
+// This middleware handles frontend routes and injects product-specific meta tags
+app.use(seoMetaInjectionMiddleware);
+
 /* ------------------------------ START APP ------------------------------- */
 async function start() {
   const uri = process.env.MONGODB_URI;
