@@ -1075,13 +1075,13 @@ const ProductDetail = () => {
                       {descriptionExpanded ||
                       product.longDescription.length <=
                         250 ? (
-                        <p className="whitespace-pre-wrap">
+                        <p className="whitespace-pre-wrap break-words">
                           {escapeHtml(
                             product.longDescription
                           )}
                         </p>
                       ) : (
-                        <p className="whitespace-pre-wrap">
+                        <p className="whitespace-pre-wrap break-words">
                           {escapeHtml(
                             product.longDescription.substring(
                               0,
