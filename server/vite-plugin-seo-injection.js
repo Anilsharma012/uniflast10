@@ -5,7 +5,6 @@
  */
 
 const { generateProductSeoTags, createMetaTagsHtml } = require('./utils/seoGenerator');
-const axios = require('axios');
 
 const extractProductSlug = (pathname) => {
   const match = pathname.match(/^\/products\/([^/?]+)/);
@@ -16,34 +15,37 @@ const seoInjectionVitePlugin = () => {
   return {
     name: 'vite-plugin-seo-injection',
     apply: 'serve',
-    
+
     configResolved(config) {
       this.config = config;
     },
 
     async transformIndexHtml(html, ctx) {
       const slug = extractProductSlug(ctx.path);
-      
+
       if (!slug) {
         return html;
       }
 
       try {
-        // Fetch product from backend
-        const response = await axios.get(`http://localhost:5055/api/products/${slug}`, {
-          timeout: 5000,
+        // Fetch product from backend using native fetch
+        const response = await fetch(`http://localhost:5055/api/products/${slug}`, {
+          signal: AbortSignal.timeout(5000),
         });
 
-        if (response.data?.data) {
-          const product = response.data.data;
-          const baseUrl = 'http://localhost:8080';
-          
-          // Generate SEO tags
-          const seoData = generateProductSeoTags(product, baseUrl);
-          const metaTags = createMetaTagsHtml(seoData);
+        if (response.ok) {
+          const json = await response.json();
+          if (json?.data) {
+            const product = json.data;
+            const baseUrl = 'http://localhost:8080';
 
-          // Inject before </head>
-          return html.replace('</head>', metaTags + '</head>');
+            // Generate SEO tags
+            const seoData = generateProductSeoTags(product, baseUrl);
+            const metaTags = createMetaTagsHtml(seoData);
+
+            // Inject before </head>
+            return html.replace('</head>', metaTags + '</head>');
+          }
         }
       } catch (err) {
         // Silently fail - return original HTML
