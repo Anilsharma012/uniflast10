@@ -16,10 +16,6 @@ const seoInjectionVitePlugin = () => {
     name: 'vite-plugin-seo-injection',
     apply: 'serve',
 
-    configResolved(config) {
-      this.config = config;
-    },
-
     async transformIndexHtml(html, ctx) {
       const slug = extractProductSlug(ctx.path);
 
