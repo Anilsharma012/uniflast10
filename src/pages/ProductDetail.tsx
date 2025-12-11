@@ -648,499 +648,500 @@ const ProductDetail = () => {
           </Link>
 
           <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-6 sm:gap-8 md:gap-12 w-full">
-          <div className="min-w-0">
-            <ProductImageGallery
-              images={product?.images || []}
-              productTitle={title}
-              selectedColor={selectedColor}
-              colorImages={product?.colorImages}
-              colorVariants={product?.colorVariants}
-            />
-          </div>
+            <div className="min-w-0">
+              <ProductImageGallery
+                images={product?.images || []}
+                productTitle={title}
+                selectedColor={selectedColor}
+                colorImages={product?.colorImages}
+                colorVariants={product?.colorVariants}
+              />
+            </div>
 
-          <div className="min-w-0">
-            <p className="text-xs sm:text-sm text-muted-foreground uppercase tracking-wider mb-2 break-words">
-              {product.category}
-            </p>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tighter mb-2 sm:mb-4 break-words">
-              {title}
-            </h1>
-            <div className="flex items-baseline gap-3 mb-4 sm:mb-6">
-              <p className="text-xl sm:text-2xl md:text-3xl font-bold">
-                ₹{(() => {
-                  const basePrice = Number(product.price || 0);
-                  if (product?.discount?.value && product.discount.type === 'percentage') {
-                    return (basePrice - (basePrice * product.discount.value / 100)).toLocaleString("en-IN");
-                  } else if (product?.discount?.value && product.discount.type === 'flat') {
-                    return Math.max(0, basePrice - product.discount.value).toLocaleString("en-IN");
-                  }
-                  return basePrice.toLocaleString("en-IN");
-                })()}
+            <div className="min-w-0">
+              <p className="text-xs sm:text-sm text-muted-foreground uppercase tracking-wider mb-2 break-words">
+                {product.category}
               </p>
-              {product?.discount?.value && product.discount.value > 0 && (
-                <>
-                  <p className="text-sm sm:text-base text-muted-foreground line-through">
-                    ₹{Number(product.price || 0).toLocaleString("en-IN")}
-                  </p>
-                  <Badge className="bg-red-500 hover:bg-red-600">
-                    {product.discount.type === 'percentage' ? `${product.discount.value}% OFF` : `₹${product.discount.value} OFF`}
-                  </Badge>
-                </>
-              )}
-            </div>
-            <div className="mb-3 sm:mb-4">
-              <Badge
-                variant={outOfStock ? "destructive" : "secondary"}
-                className="text-xs sm:text-sm"
-              >
-                {outOfStock ? "Not Available" : "Available"}
-              </Badge>
-            </div>
-            <p className="text-xs sm:text-sm md:text-base text-muted-foreground mb-6 sm:mb-8">
-              {product.description}
-            </p>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tighter mb-2 sm:mb-4 break-words">
+                {title}
+              </h1>
+              <div className="flex items-baseline gap-3 mb-4 sm:mb-6">
+                <p className="text-xl sm:text-2xl md:text-3xl font-bold">
+                  ₹{(() => {
+                    const basePrice = Number(product.price || 0);
+                    if (product?.discount?.value && product.discount.type === 'percentage') {
+                      return (basePrice - (basePrice * product.discount.value / 100)).toLocaleString("en-IN");
+                    } else if (product?.discount?.value && product.discount.type === 'flat') {
+                      return Math.max(0, basePrice - product.discount.value).toLocaleString("en-IN");
+                    }
+                    return basePrice.toLocaleString("en-IN");
+                  })()}
+                </p>
+                {product?.discount?.value && product.discount.value > 0 && (
+                  <>
+                    <p className="text-sm sm:text-base text-muted-foreground line-through">
+                      ₹{Number(product.price || 0).toLocaleString("en-IN")}
+                    </p>
+                    <Badge className="bg-red-500 hover:bg-red-600">
+                      {product.discount.type === 'percentage' ? `${product.discount.value}% OFF` : `₹${product.discount.value} OFF`}
+                    </Badge>
+                  </>
+                )}
+              </div>
+              <div className="mb-3 sm:mb-4">
+                <Badge
+                  variant={outOfStock ? "destructive" : "secondary"}
+                  className="text-xs sm:text-sm"
+                >
+                  {outOfStock ? "Not Available" : "Available"}
+                </Badge>
+              </div>
+              <p className="text-xs sm:text-sm md:text-base text-muted-foreground mb-6 sm:mb-8">
+                {product.description}
+              </p>
 
-            <AvailableCoupons
-              onUseNow={(code) => {
-                navigate(`/cart?coupon=${encodeURIComponent(code)}`);
-              }}
-            />
+              <AvailableCoupons
+                onUseNow={(code) => {
+                  navigate(`/cart?coupon=${encodeURIComponent(code)}`);
+                }}
+              />
 
-            {/* ✅ COLOR OPTIONS UI - supports both old colors array and new colorVariants */}
-            {(() => {
-              // Use colorVariants if available, otherwise fallback to colors array
-              const colorOptions = product?.colorVariants?.length > 0
-                ? product.colorVariants.map(cv => ({ name: cv.colorName, code: cv.colorCode }))
-                : product?.colors?.length > 0
-                ? product.colors.map(c => ({ name: c, code: undefined }))
-                : [];
+              {/* ✅ COLOR OPTIONS UI - supports both old colors array and new colorVariants */}
+              {(() => {
+                // Use colorVariants if available, otherwise fallback to colors array
+                const colorOptions = product?.colorVariants?.length > 0
+                  ? product.colorVariants.map(cv => ({ name: cv.colorName, code: cv.colorCode }))
+                  : product?.colors?.length > 0
+                  ? product.colors.map(c => ({ name: c, code: undefined }))
+                  : [];
 
-              return colorOptions.length > 0 ? (
-                <div className="mb-4 sm:mb-6">
-                  <label className="block text-xs sm:text-sm font-semibold mb-2 sm:mb-3">
-                    Color
-                  </label>
-                  <div className="flex flex-wrap gap-2 sm:gap-3">
-                    {colorOptions.map((colorOpt) => {
-                      const c = colorOpt.name;
-                      const colorStock = Array.isArray(product.colorInventory)
-                        ? product.colorInventory.find(ci => ci.color === c)?.qty ?? 0
-                        : Number(product.stock ?? 0);
-                      const isOutOfStock = colorStock === 0;
-
-                      return (
-                        <button
-                          key={c}
-                          type="button"
-                          disabled={isOutOfStock}
-                          onClick={() => setSelectedColor(c)}
-                          className={cn(
-                            "flex items-center gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full border text-xs sm:text-sm transition-colors",
-                            isOutOfStock
-                              ? "opacity-50 cursor-not-allowed bg-muted border-border text-muted-foreground"
-                              : selectedColor === c
-                              ? "bg-primary text-primary-foreground border-primary"
-                              : "bg-transparent border-border hover:border-primary"
-                          )}
-                        >
-                          <span
-                            className="h-4 w-4 rounded-full border border-current"
-                            style={{ backgroundColor: colorOpt.code ? colorOpt.code : colorToCss(c) }}
-                          />
-                          <span>{c}</span>
-                          {isOutOfStock && <span className="text-xs">Out of Stock</span>}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              ) : null;
-            })()}
-
-            {/* Per-size inventory display */}
-            {product?.trackInventoryBySize &&
-              Array.isArray(product?.sizeInventory) &&
-              product.sizeInventory.length > 0 && (
-                <div className="mb-4 sm:mb-6">
-                  <div className="flex items-center justify-between mb-2 sm:mb-3 gap-2">
-                    <label className="block text-xs sm:text-sm font-semibold">
-                      Size
+                return colorOptions.length > 0 ? (
+                  <div className="mb-4 sm:mb-6">
+                    <label className="block text-xs sm:text-sm font-semibold mb-2 sm:mb-3">
+                      Color
                     </label>
-                    {product.sizeChart ? (
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setShowSizeChartTable(true)}
-                        className="text-xs h-auto p-1"
-                      >
-                        <Ruler className="h-3 w-3 mr-1" />
-                        Size Chart
-                      </Button>
-                    ) : (
-                      product.sizeChartUrl && (
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => setShowSizeChart(true)}
-                          className="text-xs h-auto p-1"
-                        >
-                          <Ruler className="h-3 w-3 mr-1" />
-                          Size Chart
-                        </Button>
-                      )
-                    )}
-                  </div>
-                  <div className="flex flex-wrap gap-2 sm:gap-3 pb-10 sm:pb-12">
-                    {product.sizeInventory.map((sizeItem) => {
-                      const isOutOfStock = sizeItem.qty === 0;
-                      const isLowStock =
-                        sizeItem.qty > 0 && sizeItem.qty <= 3;
-                      return (
-                        <div key={sizeItem.code} className="relative pb-6 sm:pb-7">
+                    <div className="flex flex-wrap gap-2 sm:gap-3">
+                      {colorOptions.map((colorOpt) => {
+                        const c = colorOpt.name;
+                        const colorStock = Array.isArray(product.colorInventory)
+                          ? product.colorInventory.find(ci => ci.color === c)?.qty ?? 0
+                          : Number(product.stock ?? 0);
+                        const isOutOfStock = colorStock === 0;
+
+                        return (
                           <button
+                            key={c}
                             type="button"
                             disabled={isOutOfStock}
-                            onClick={() => {
-                              setSelectedSize(sizeItem.code);
-                              setSizeStockError("");
-                            }}
+                            onClick={() => setSelectedColor(c)}
                             className={cn(
-                              "px-3 sm:px-4 py-1.5 sm:py-2 rounded border text-xs sm:text-sm font-medium transition-colors",
+                              "flex items-center gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full border text-xs sm:text-sm transition-colors",
                               isOutOfStock
                                 ? "opacity-50 cursor-not-allowed bg-muted border-border text-muted-foreground"
-                                : selectedSize === sizeItem.code
+                                : selectedColor === c
                                 ? "bg-primary text-primary-foreground border-primary"
                                 : "bg-transparent border-border hover:border-primary"
                             )}
                           >
-                            {sizeItem.label}
+                            <span
+                              className="h-4 w-4 rounded-full border border-current"
+                              style={{ backgroundColor: colorOpt.code ? colorOpt.code : colorToCss(c) }}
+                            />
+                            <span>{c}</span>
+                            {isOutOfStock && <span className="text-xs">Out of Stock</span>}
                           </button>
-                          {isOutOfStock && (
-                            <span className="absolute -bottom-5 left-0 text-xs text-destructive font-medium whitespace-nowrap">
-                              Out of stock
-                            </span>
-                          )}
-                          {isLowStock && !isOutOfStock && (
-                            <span className="absolute -bottom-5 left-0 text-xs text-orange-600 font-medium whitespace-nowrap">
-                              Only {sizeItem.qty} left
-                            </span>
-                          )}
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
+                    </div>
                   </div>
-                  {sizeStockError && (
-                    <p className="text-xs text-destructive mt-4">
-                      {sizeStockError}
-                    </p>
-                  )}
-                </div>
-              )}
+                ) : null;
+              })()}
 
-
-            {/* Simple sizes (non-inventory tracked) */}
-            {!product?.trackInventoryBySize &&
-              Array.isArray(product?.sizes) &&
-              product.sizes.length > 0 && (
-                <div className="mb-4 sm:mb-6">
-                  <div className="flex items-center justify-between mb-2 sm:mb-3 gap-2">
-                    <label className="block text-xs sm:text-sm font-semibold">
-                      Size
-                    </label>
-                    {product.sizeChart ? (
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setShowSizeChartTable(true)}
-                        className="text-xs h-auto p-1"
-                      >
-                        <Ruler className="h-3 w-3 mr-1" />
-                        Size Chart
-                      </Button>
-                    ) : (
-                      product.sizeChartUrl && (
+              {/* Per-size inventory display */}
+              {product?.trackInventoryBySize &&
+                Array.isArray(product?.sizeInventory) &&
+                product.sizeInventory.length > 0 && (
+                  <div className="mb-4 sm:mb-6">
+                    <div className="flex items-center justify-between mb-2 sm:mb-3 gap-2">
+                      <label className="block text-xs sm:text-sm font-semibold">
+                        Size
+                      </label>
+                      {product.sizeChart ? (
                         <Button
                           type="button"
                           variant="ghost"
                           size="sm"
-                          onClick={() => setShowSizeChart(true)}
+                          onClick={() => setShowSizeChartTable(true)}
                           className="text-xs h-auto p-1"
                         >
                           <Ruler className="h-3 w-3 mr-1" />
                           Size Chart
                         </Button>
-                      )
+                      ) : (
+                        product.sizeChartUrl && (
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setShowSizeChart(true)}
+                            className="text-xs h-auto p-1"
+                          >
+                            <Ruler className="h-3 w-3 mr-1" />
+                            Size Chart
+                          </Button>
+                        )
+                      )}
+                    </div>
+                    <div className="flex flex-wrap gap-2 sm:gap-3 pb-10 sm:pb-12">
+                      {product.sizeInventory.map((sizeItem) => {
+                        const isOutOfStock = sizeItem.qty === 0;
+                        const isLowStock =
+                          sizeItem.qty > 0 && sizeItem.qty <= 3;
+                        return (
+                          <div key={sizeItem.code} className="relative pb-6 sm:pb-7">
+                            <button
+                              type="button"
+                              disabled={isOutOfStock}
+                              onClick={() => {
+                                setSelectedSize(sizeItem.code);
+                                setSizeStockError("");
+                              }}
+                              className={cn(
+                                "px-3 sm:px-4 py-1.5 sm:py-2 rounded border text-xs sm:text-sm font-medium transition-colors",
+                                isOutOfStock
+                                  ? "opacity-50 cursor-not-allowed bg-muted border-border text-muted-foreground"
+                                  : selectedSize === sizeItem.code
+                                  ? "bg-primary text-primary-foreground border-primary"
+                                  : "bg-transparent border-border hover:border-primary"
+                              )}
+                            >
+                              {sizeItem.label}
+                            </button>
+                            {isOutOfStock && (
+                              <span className="absolute -bottom-5 left-0 text-xs text-destructive font-medium whitespace-nowrap">
+                                Out of stock
+                              </span>
+                            )}
+                            {isLowStock && !isOutOfStock && (
+                              <span className="absolute -bottom-5 left-0 text-xs text-orange-600 font-medium whitespace-nowrap">
+                                Only {sizeItem.qty} left
+                              </span>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                    {sizeStockError && (
+                      <p className="text-xs text-destructive mt-4">
+                        {sizeStockError}
+                      </p>
                     )}
                   </div>
-                  <div className="flex flex-wrap gap-2 sm:gap-3">
-                    {product.sizes.map((sz) => (
-                      <button
-                        key={sz}
-                        type="button"
-                        onClick={() => {
-                          setSelectedSize(sz);
-                          setSizeStockError("");
-                        }}
-                        className={cn(
-                          "px-2.5 sm:px-3 py-1 sm:py-1.5 rounded border text-xs sm:text-sm",
-                          selectedSize === sz
-                            ? "bg-primary text-primary-foreground border-primary"
-                            : "bg-transparent border-border"
-                        )}
-                      >
-                        {sz}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
+                )}
 
-            <div className="mb-6 sm:mb-8">
-              <label className="block text-xs sm:text-sm font-semibold mb-2 sm:mb-3">
-                Quantity
-              </label>
-              <div className="flex items-center gap-3 sm:gap-4">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() =>
-                    setQuantity((q) => Math.max(1, q - 1))
-                  }
-                  className="h-9 w-9 sm:h-10 sm:w-10"
-                >
-                  -
-                </Button>
-                <span className="font-semibold min-w-[40px] text-center text-sm sm:text-base">
-                  {quantity}
-                </span>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() =>
-                    setQuantity((q) => q + 1)
-                  }
-                  className="h-9 w-9 sm:h-10 sm:w-10"
-                >
-                  +
-                </Button>
-              </div>
-            </div>
-
-            <div className="space-y-2 sm:space-y-3">
-              {outOfStock ||
-              (product?.trackInventoryBySize && !selectedSize) ? (
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <span className="w-full block">
+              {/* Simple sizes (non-inventory tracked) */}
+              {!product?.trackInventoryBySize &&
+                Array.isArray(product?.sizes) &&
+                product.sizes.length > 0 && (
+                  <div className="mb-4 sm:mb-6">
+                    <div className="flex items-center justify-between mb-2 sm:mb-3 gap-2">
+                      <label className="block text-xs sm:text-sm font-semibold">
+                        Size
+                      </label>
+                      {product.sizeChart ? (
                         <Button
-                          size="lg"
-                          className="w-full text-xs sm:text-sm h-9 sm:h-11"
-                          disabled
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setShowSizeChartTable(true)}
+                          className="text-xs h-auto p-1"
                         >
-                          <ShoppingCart className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-                          Add to Cart
+                          <Ruler className="h-3 w-3 mr-1" />
+                          Size Chart
                         </Button>
-                      </span>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      {outOfStock
-                        ? "Out of stock"
-                        : "Please select a size"}
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              ) : (
-                <Button
-                  size="lg"
-                  className="w-full text-xs sm:text-sm h-9 sm:h-11"
-                  onClick={handleAddToCart}
-                >
-                  <ShoppingCart className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-                  Add to Cart
-                </Button>
-              )}
-              {!(
-                outOfStock ||
-                (product?.trackInventoryBySize && !selectedSize)
-              ) && (
-                <Button
-                  size="lg"
-                  className="w-full text-xs sm:text-sm h-9 sm:h-11"
-                  onClick={handleBuyNow}
-                >
-                  Buy Now
-                </Button>
-              )}
-              {user ? (
-                <Button
-                  size="lg"
-                  variant={isVerifiedBuyer ? "secondary" : "outline"}
-                  className="w-full text-xs sm:text-sm h-9 sm:h-11"
-                  onClick={() => setShowReviewModal(true)}
-                  disabled={!isVerifiedBuyer}
-                >
-                  {isVerifiedBuyer
-                    ? "Write a Review"
-                    : "Available after purchase"}
-                </Button>
-              ) : (
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <span className="w-full block">
-                        <Button
-                          size="lg"
-                          variant="outline"
-                          className="w-full text-xs sm:text-sm h-9 sm:h-11"
-                          disabled
-                        >
-                          Write a Review
-                        </Button>
-                      </span>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      Sign in to write a review
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              )}
-            </div>
-
-            {(product?.highlights?.length ||
-              product?.specs?.length ||
-              product?.longDescription) && (
-              <div
-                id="details"
-                className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-border w-full"
-              >
-                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tighter mb-6 sm:mb-8">
-                  Product Details
-                </h2>
-
-                {product?.highlights &&
-                  product.highlights.length > 0 && (
-                    <div
-                      id="highlights"
-                      className="mb-6 sm:mb-8 w-full"
-                    >
-                      <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">
-                        Highlights
-                      </h3>
-                      <ul className="space-y-1.5 sm:space-y-2">
-                        {product.highlights.map(
-                          (highlight, idx) => (
-                            <li
-                              key={idx}
-                              className="flex items-start gap-2 sm:gap-3"
-                            >
-                              <span className="text-primary mt-0.5 flex-shrink-0">
-                                ���
-                              </span>
-                              <span className="text-xs sm:text-sm text-foreground">
-                                {highlight}
-                              </span>
-                            </li>
-                          )
-                        )}
-                      </ul>
-                    </div>
-                  )}
-
-                {product?.specs &&
-                  product.specs.length > 0 && (
-                    <div id="specs" className="mb-6 sm:mb-8 w-full">
-                      <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">
-                        Specifications
-                      </h3>
-                      <div className="overflow-x-auto">
-                        <table className="w-full text-xs sm:text-sm">
-                          <tbody>
-                            {product.specs.map((spec, idx) => (
-                              <tr
-                                key={idx}
-                                className={
-                                  idx % 2 === 0
-                                    ? "bg-muted/30"
-                                    : ""
-                                }
-                              >
-                                <td className="px-2 sm:px-4 py-2 sm:py-3 font-medium text-foreground w-1/3 md:w-1/4">
-                                  {spec.key}
-                                </td>
-                                <td className="px-2 sm:px-4 py-2 sm:py-3 text-muted-foreground">
-                                  {spec.value}
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  )}
-
-                {product?.longDescription && (
-                  <div
-                    id="description"
-                    className="mb-6 sm:mb-8 w-full"
-                  >
-                    <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">
-                      Description
-                    </h3>
-                    <div className="text-xs sm:text-sm text-muted-foreground leading-relaxed space-y-2 w-full">
-                      {descriptionExpanded ||
-                      product.longDescription.length <=
-                        250 ? (
-                        <p className="whitespace-pre-wrap break-words">
-                          {escapeHtml(
-                            product.longDescription
-                          )}
-                        </p>
                       ) : (
-                        <p className="whitespace-pre-wrap break-words">
-                          {escapeHtml(
-                            product.longDescription.substring(
-                              0,
-                              250
-                            )
-                          )}
-                          ...
-                        </p>
+                        product.sizeChartUrl && (
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setShowSizeChart(true)}
+                            className="text-xs h-auto p-1"
+                          >
+                            <Ruler className="h-3 w-3 mr-1" />
+                            Size Chart
+                          </Button>
+                        )
                       )}
-                      {product.longDescription.length >
-                        250 && (
+                    </div>
+                    <div className="flex flex-wrap gap-2 sm:gap-3">
+                      {product.sizes.map((sz) => (
                         <button
-                          onClick={() =>
-                            setDescriptionExpanded(
-                              (v) => !v
-                            )
-                          }
-                          className="inline-flex items-center gap-1 sm:gap-2 text-primary hover:text-primary/80 font-medium mt-3 sm:mt-4 text-xs sm:text-sm"
-                        >
-                          {descriptionExpanded ? (
-                            <>
-                              Read less
-                              <ChevronUp className="h-3 w-3 sm:h-4 sm:w-4" />
-                            </>
-                          ) : (
-                            <>
-                              Read more
-                              <ChevronDown className="h-3 w-3 sm:h-4 sm:w-4" />
-                            </>
+                          key={sz}
+                          type="button"
+                          onClick={() => {
+                            setSelectedSize(sz);
+                            setSizeStockError("");
+                          }}
+                          className={cn(
+                            "px-2.5 sm:px-3 py-1 sm:py-1.5 rounded border text-xs sm:text-sm",
+                            selectedSize === sz
+                              ? "bg-primary text-primary-foreground border-primary"
+                              : "bg-transparent border-border"
                           )}
+                        >
+                          {sz}
                         </button>
-                      )}
+                      ))}
                     </div>
                   </div>
                 )}
+
+              <div className="mb-6 sm:mb-8">
+                <label className="block text-xs sm:text-sm font-semibold mb-2 sm:mb-3">
+                  Quantity
+                </label>
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() =>
+                      setQuantity((q) => Math.max(1, q - 1))
+                    }
+                    className="h-9 w-9 sm:h-10 sm:w-10"
+                  >
+                    -
+                  </Button>
+                  <span className="font-semibold min-w-[40px] text-center text-sm sm:text-base">
+                    {quantity}
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() =>
+                      setQuantity((q) => q + 1)
+                    }
+                    className="h-9 w-9 sm:h-10 sm:w-10"
+                  >
+                    +
+                  </Button>
+                </div>
               </div>
-            )}
+
+              <div className="space-y-2 sm:space-y-3">
+                {outOfStock ||
+                (product?.trackInventoryBySize && !selectedSize) ? (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span className="w-full block">
+                          <Button
+                            size="lg"
+                            className="w-full text-xs sm:text-sm h-9 sm:h-11"
+                            disabled
+                          >
+                            <ShoppingCart className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                            Add to Cart
+                          </Button>
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        {outOfStock
+                          ? "Out of stock"
+                          : "Please select a size"}
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                ) : (
+                  <Button
+                    size="lg"
+                    className="w-full text-xs sm:text-sm h-9 sm:h-11"
+                    onClick={handleAddToCart}
+                  >
+                    <ShoppingCart className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                    Add to Cart
+                  </Button>
+                )}
+                {!(
+                  outOfStock ||
+                  (product?.trackInventoryBySize && !selectedSize)
+                ) && (
+                  <Button
+                    size="lg"
+                    className="w-full text-xs sm:text-sm h-9 sm:h-11"
+                    onClick={handleBuyNow}
+                  >
+                    Buy Now
+                  </Button>
+                )}
+                {user ? (
+                  <Button
+                    size="lg"
+                    variant={isVerifiedBuyer ? "secondary" : "outline"}
+                    className="w-full text-xs sm:text-sm h-9 sm:h-11"
+                    onClick={() => setShowReviewModal(true)}
+                    disabled={!isVerifiedBuyer}
+                  >
+                    {isVerifiedBuyer
+                      ? "Write a Review"
+                      : "Available after purchase"}
+                  </Button>
+                ) : (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span className="w-full block">
+                          <Button
+                            size="lg"
+                            variant="outline"
+                            className="w-full text-xs sm:text-sm h-9 sm:h-11"
+                            disabled
+                          >
+                            Write a Review
+                          </Button>
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        Sign in to write a review
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )}
+              </div>
+            </div>
           </div>
         </div>
-        </div>
+
+        {(product?.highlights?.length ||
+          product?.specs?.length ||
+          product?.longDescription) && (
+          <div className="max-w-7xl mx-auto w-full">
+            <div
+              id="details"
+              className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-border w-full"
+            >
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tighter mb-6 sm:mb-8">
+                Product Details
+              </h2>
+
+              {product?.highlights &&
+                product.highlights.length > 0 && (
+                  <div
+                    id="highlights"
+                    className="mb-6 sm:mb-8 w-full"
+                  >
+                    <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">
+                      Highlights
+                    </h3>
+                    <ul className="space-y-1.5 sm:space-y-2">
+                      {product.highlights.map(
+                        (highlight, idx) => (
+                          <li
+                            key={idx}
+                            className="flex items-start gap-2 sm:gap-3"
+                          >
+                            <span className="text-primary mt-0.5 flex-shrink-0">
+                              ✓
+                            </span>
+                            <span className="text-xs sm:text-sm text-foreground">
+                              {highlight}
+                            </span>
+                          </li>
+                        )
+                      )}
+                    </ul>
+                  </div>
+                )}
+
+              {product?.specs &&
+                product.specs.length > 0 && (
+                  <div id="specs" className="mb-6 sm:mb-8 w-full">
+                    <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">
+                      Specifications
+                    </h3>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-xs sm:text-sm">
+                        <tbody>
+                          {product.specs.map((spec, idx) => (
+                            <tr
+                              key={idx}
+                              className={
+                                idx % 2 === 0
+                                  ? "bg-muted/30"
+                                  : ""
+                              }
+                            >
+                              <td className="px-2 sm:px-4 py-2 sm:py-3 font-medium text-foreground w-1/3 md:w-1/4">
+                                {spec.key}
+                              </td>
+                              <td className="px-2 sm:px-4 py-2 sm:py-3 text-muted-foreground">
+                                {spec.value}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+
+              {product?.longDescription && (
+                <div
+                  id="description"
+                  className="mb-6 sm:mb-8 w-full"
+                >
+                  <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">
+                    Description
+                  </h3>
+                  <div className="text-xs sm:text-sm text-muted-foreground leading-relaxed space-y-2 w-full">
+                    {descriptionExpanded ||
+                    product.longDescription.length <=
+                      250 ? (
+                      <p className="whitespace-pre-wrap break-words">
+                        {escapeHtml(
+                          product.longDescription
+                        )}
+                      </p>
+                    ) : (
+                      <p className="whitespace-pre-wrap break-words">
+                        {escapeHtml(
+                          product.longDescription.substring(
+                            0,
+                            250
+                          )
+                        )}
+                        ...
+                      </p>
+                    )}
+                    {product.longDescription.length >
+                      250 && (
+                      <button
+                        onClick={() =>
+                          setDescriptionExpanded(
+                            (v) => !v
+                          )
+                        }
+                        className="inline-flex items-center gap-1 sm:gap-2 text-primary hover:text-primary/80 font-medium mt-3 sm:mt-4 text-xs sm:text-sm"
+                      >
+                        {descriptionExpanded ? (
+                          <>
+                            Read less
+                            <ChevronUp className="h-3 w-3 sm:h-4 sm:w-4" />
+                          </>
+                        ) : (
+                          <>
+                            Read more
+                            <ChevronDown className="h-3 w-3 sm:h-4 sm:w-4" />
+                          </>
+                        )}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         <div className="max-w-7xl mx-auto w-full">
           <ReviewsList
