@@ -263,6 +263,8 @@ router.put('/:id', requireAuth, requireAdmin, async (req, res) => {
     if (typeof body.image_url !== 'undefined') updates.images = [body.image_url];
     if (Array.isArray(body.images)) updates.images = body.images;
 
+    // NOTE: slug is NEVER updated. It's set once at creation and stays permanent.
+
     if (Array.isArray(body.sizes)) updates.sizes = body.sizes;
 
     // ✅ NEW: update colors
