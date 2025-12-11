@@ -36,7 +36,7 @@ const createDefaultSeoTags = (pathname) => {
 
 const injectMetaTags = async (html, pathname, baseUrl = 'https://uni10.in') => {
   const slug = extractProductSlug(pathname);
-  
+
   if (!slug) {
     return html;
   }
@@ -44,7 +44,7 @@ const injectMetaTags = async (html, pathname, baseUrl = 'https://uni10.in') => {
   try {
     // Try to fetch by slug first, then by ID
     let product = await Product.findOne({ slug });
-    
+
     if (!product) {
       product = await Product.findById(slug);
     }
@@ -57,18 +57,52 @@ const injectMetaTags = async (html, pathname, baseUrl = 'https://uni10.in') => {
     const seoData = generateProductSeoTags(product, baseUrl);
     const metaTags = createMetaTagsHtml(seoData);
 
-    // Find the closing </head> tag and insert meta tags before it
-    const headClosingTag = '</head>';
-    const headClosingIndex = html.indexOf(headClosingTag);
-    
-    if (headClosingIndex !== -1) {
-      return (
-        html.slice(0, headClosingIndex) +
-        metaTags +
-        html.slice(headClosingIndex)
+    // Replace existing meta tags instead of appending
+    // This ensures the product-specific tags take precedence
+
+    // 1. Replace the title tag
+    html = html.replace(
+      /<title>[^<]*<\/title>/,
+      `<title>${seoData.title.replace(/"/g, '&quot;')}</title>`
+    );
+
+    // 2. Replace the meta description tag
+    html = html.replace(
+      /<meta\s+name="description"\s+content="[^"]*"\s*\/?>/i,
+      `<meta name="description" content="${seoData.description.replace(/"/g, '&quot;')}" />`
+    );
+
+    // 3. Add/replace og:title
+    if (html.includes('property="og:title"')) {
+      html = html.replace(
+        /<meta\s+property="og:title"\s+content="[^"]*"\s*\/?>/i,
+        `<meta property="og:title" content="${seoData.ogTitle.replace(/"/g, '&quot;')}" />`
       );
     }
-    
+
+    // 4. Add/replace og:description
+    if (html.includes('property="og:description"')) {
+      html = html.replace(
+        /<meta\s+property="og:description"\s+content="[^"]*"\s*\/?>/i,
+        `<meta property="og:description" content="${seoData.ogDescription.replace(/"/g, '&quot;')}" />`
+      );
+    }
+
+    // 5. Add keywords meta tag if it doesn't exist
+    if (seoData.keywords && !html.includes('name="keywords"')) {
+      const headClosingIndex = html.indexOf('</head>');
+      if (headClosingIndex !== -1) {
+        html = html.slice(0, headClosingIndex) +
+          `    <meta name="keywords" content="${seoData.keywords.replace(/"/g, '&quot;')}" />\n` +
+          html.slice(headClosingIndex);
+      }
+    } else if (seoData.keywords) {
+      html = html.replace(
+        /<meta\s+name="keywords"\s+content="[^"]*"\s*\/?>/i,
+        `<meta name="keywords" content="${seoData.keywords.replace(/"/g, '&quot;')}" />`
+      );
+    }
+
     return html;
   } catch (err) {
     console.error('Error injecting SEO meta tags:', err);
