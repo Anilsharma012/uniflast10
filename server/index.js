@@ -98,12 +98,15 @@ app.use(
       try {
         const u = new URL(origin);
         const hostname = u.hostname;
-        if (hostname.endsWith('.uni10.in') || hostname.endsWith('.fly.dev') || hostname === 'fly.dev') return cb(null, true);
+        // Match .fly.dev, fly.dev, .uni10.in
+        if (hostname.includes('.fly.dev') || hostname.includes('fly.dev') || hostname.endsWith('.uni10.in') || hostname === 'uni10.in') {
+          return cb(null, true);
+        }
       } catch (_) {
         // ignore parse error
       }
 
-      console.warn('Blocked CORS for origin:', origin);
+      console.warn('Blocked CORS for origin:', origin, 'parsed hostname if possible');
       return cb(new Error('Not allowed by CORS'));
     },
     credentials: true,
