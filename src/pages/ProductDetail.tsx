@@ -1024,71 +1024,73 @@ const ProductDetail = () => {
                 Product Details
               </h2>
 
-              {product?.highlights &&
-                product.highlights.length > 0 && (
-                  <div
-                    id="highlights"
-                    className="mb-6 sm:mb-8 w-full"
-                  >
-                    <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">
-                      Highlights
-                    </h3>
-                    <ul className="space-y-1.5 sm:space-y-2">
-                      {product.highlights.map(
-                        (highlight, idx) => (
-                          <li
-                            key={idx}
-                            className="flex items-start gap-2 sm:gap-3"
-                          >
-                            <span className="text-primary mt-0.5 flex-shrink-0">
-                              ✓
-                            </span>
-                            <span className="text-xs sm:text-sm text-foreground">
-                              {highlight}
-                            </span>
-                          </li>
-                        )
-                      )}
-                    </ul>
-                  </div>
-                )}
-
-              {product?.specs &&
-                product.specs.length > 0 && (
-                  <div id="specs" className="mb-6 sm:mb-8 w-full">
-                    <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">
-                      Specifications
-                    </h3>
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-xs sm:text-sm">
-                        <tbody>
-                          {product.specs.map((spec, idx) => (
-                            <tr
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10 md:gap-12">
+                {product?.highlights &&
+                  product.highlights.length > 0 && (
+                    <div
+                      id="highlights"
+                      className="min-w-0"
+                    >
+                      <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">
+                        Highlights
+                      </h3>
+                      <ul className="space-y-1.5 sm:space-y-2">
+                        {product.highlights.map(
+                          (highlight, idx) => (
+                            <li
                               key={idx}
-                              className={
-                                idx % 2 === 0
-                                  ? "bg-muted/30"
-                                  : ""
-                              }
+                              className="flex items-start gap-2 sm:gap-3"
                             >
-                              <td className="px-2 sm:px-4 py-2 sm:py-3 font-medium text-foreground w-1/3 md:w-1/4">
-                                {spec.key}
-                              </td>
-                              <td className="px-2 sm:px-4 py-2 sm:py-3 text-muted-foreground">
-                                {spec.value}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                              <span className="text-primary mt-0.5 flex-shrink-0">
+                                ✓
+                              </span>
+                              <span className="text-xs sm:text-sm text-foreground">
+                                {highlight}
+                              </span>
+                            </li>
+                          )
+                        )}
+                      </ul>
                     </div>
-                  </div>
-                )}
+                  )}
+
+                {product?.specs &&
+                  product.specs.length > 0 && (
+                    <div id="specs" className="min-w-0">
+                      <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">
+                        Specifications
+                      </h3>
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-xs sm:text-sm">
+                          <tbody>
+                            {product.specs.map((spec, idx) => (
+                              <tr
+                                key={idx}
+                                className={
+                                  idx % 2 === 0
+                                    ? "bg-muted/30"
+                                    : ""
+                                }
+                              >
+                                <td className="px-2 sm:px-4 py-2 sm:py-3 font-medium text-foreground">
+                                  {spec.key}
+                                </td>
+                                <td className="px-2 sm:px-4 py-2 sm:py-3 text-muted-foreground">
+                                  {spec.value}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
+              </div>
 
               {product?.longDescription && (
                 <div
                   id="description"
-                  className="mb-6 sm:mb-8 w-full"
+                  className="mt-8 sm:mt-10 md:mt-12 w-full"
                 >
                   <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">
                     Description

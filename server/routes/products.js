@@ -139,13 +139,13 @@ router.post('/', requireAuth, requireAdmin, async (req, res) => {
     const price = typeof body.price !== 'undefined' ? Number(body.price) : undefined;
     if (!title || typeof price === 'undefined') return res.status(400).json({ ok: false, message: 'Missing fields' });
 
-    // Generate a unique slug to avoid duplicate key errors
-    const baseSlug = slugify(title, { lower: true, strict: true }) || `prod-${Date.now()}`;
-    let slug = baseSlug;
-    let counter = 1;
-    while (await Product.exists({ slug })) {
-      slug = `${baseSlug}-${counter}`;
-      counter += 1;
+    // Generate slug from product name without any suffixes
+    const slug = slugify(title, { lower: true, strict: true }) || `prod-${Date.now()}`;
+
+    // Check if slug already exists
+    const existingProduct = await Product.findOne({ slug });
+    if (existingProduct) {
+      return res.status(409).json({ ok: false, message: 'A product with this name already exists. Please use a different name.' });
     }
 
     const payload = {
@@ -262,6 +262,8 @@ router.put('/:id', requireAuth, requireAdmin, async (req, res) => {
     if (typeof body.featured !== 'undefined') updates.featured = !!body.featured;
     if (typeof body.image_url !== 'undefined') updates.images = [body.image_url];
     if (Array.isArray(body.images)) updates.images = body.images;
+
+    // NOTE: slug is NEVER updated. It's set once at creation and stays permanent.
 
     if (Array.isArray(body.sizes)) updates.sizes = body.sizes;
 
