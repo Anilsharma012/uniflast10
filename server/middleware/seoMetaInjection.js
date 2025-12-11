@@ -55,7 +55,6 @@ const injectMetaTags = async (html, pathname, baseUrl = 'https://uni10.in') => {
 
     // Generate SEO tags
     const seoData = generateProductSeoTags(product, baseUrl);
-    const metaTags = createMetaTagsHtml(seoData);
 
     // Replace existing meta tags instead of appending
     // This ensures the product-specific tags take precedence
