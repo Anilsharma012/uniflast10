@@ -73,27 +73,14 @@ app.use((req, _res, next) => {
 });
 
 /* -------------------------------- CORS --------------------------------- */
-/** STRICT allowlist — prod domains + local dev */
-const ALLOWED_ORIGINS = new Set([
-  'https://uni10.in',
-  'https://www.uni10.in',
-  'http://localhost:5173',
-  'http://127.0.0.1:5173',
-  'http://localhost:8080',
-  'https://ff8d2ba85401451bad453bb609262d07-vortex-hub.projects.builder.my',
-]);
-
-if (process.env.CLIENT_URL) ALLOWED_ORIGINS.add(process.env.CLIENT_URL);
-
-app.use(
-  cors({
-    origin: true,
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-    maxAge: 86400,
-  })
-);
+// Allow all origins for development
+app.use(cors({
+  origin: '*',
+  credentials: false,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  maxAge: 86400,
+}));
 
 
 /* ---------------------------- CORE MIDDLEWARES -------------------------- */
