@@ -87,28 +87,7 @@ if (process.env.CLIENT_URL) ALLOWED_ORIGINS.add(process.env.CLIENT_URL);
 
 app.use(
   cors({
-    origin: function (origin, cb) {
-      // Same-origin or server-to-server (no Origin header)
-      if (!origin) return cb(null, true);
-
-      if (ALLOWED_ORIGINS.has(origin)) return cb(null, true);
-
-      // Allow any subdomain of uni10.in (future admin/app subdomains)
-      // Also allow fly.dev domains for deployed apps
-      try {
-        const u = new URL(origin);
-        const hostname = u.hostname;
-        // Match .fly.dev, fly.dev, .uni10.in
-        if (hostname.includes('.fly.dev') || hostname.includes('fly.dev') || hostname.endsWith('.uni10.in') || hostname === 'uni10.in') {
-          return cb(null, true);
-        }
-      } catch (_) {
-        // ignore parse error
-      }
-
-      console.warn('Blocked CORS for origin:', origin, 'parsed hostname if possible');
-      return cb(new Error('Not allowed by CORS'));
-    },
+    origin: true,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
