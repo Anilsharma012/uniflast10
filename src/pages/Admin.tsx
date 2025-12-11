@@ -2219,7 +2219,10 @@ const handleProductSubmit = async (e: React.FormEvent) => {
 
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="text-slate-900 dark:text-slate-100">Create New Coupon</DialogTitle>
+       <DialogTitle className="text-white">
+  Create New Coupon
+</DialogTitle>
+
           <DialogDescription className="text-slate-600 dark:text-slate-300">
             Add a discount coupon for customers
           </DialogDescription>
