@@ -73,44 +73,15 @@ app.use((req, _res, next) => {
 });
 
 /* -------------------------------- CORS --------------------------------- */
-/** STRICT allowlist — prod domains + local dev */
-const ALLOWED_ORIGINS = new Set([
-  'https://uni10.in',
-  'https://www.uni10.in',
-  'http://localhost:5173',
-  'http://127.0.0.1:5173',
-  'http://localhost:8080',
-  'https://ff8d2ba85401451bad453bb609262d07-vortex-hub.projects.builder.my',
-]);
-
-if (process.env.CLIENT_URL) ALLOWED_ORIGINS.add(process.env.CLIENT_URL);
-
-app.use(
-  cors({
-    origin: function (origin, cb) {
-      // Same-origin or server-to-server (no Origin header)
-      if (!origin) return cb(null, true);
-
-      if (ALLOWED_ORIGINS.has(origin)) return cb(null, true);
-
-      // Allow any subdomain of uni10.in (future admin/app subdomains)
-      // Also allow fly.dev domains for deployed apps
-      try {
-        const u = new URL(origin);
-        if (u.hostname.endsWith('.uni10.in') || u.hostname.endsWith('.fly.dev')) return cb(null, true);
-      } catch (_) {
-        // ignore parse error
-      }
-
-      console.warn('Blocked CORS for origin:', origin);
-      return cb(new Error('Not allowed by CORS'));
-    },
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-    maxAge: 86400,
-  })
-);
+// Disable CORS restrictions for development
+const corsOptions = {
+  origin: '*',
+  credentials: false,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+};
+app.use(cors(corsOptions));
+console.log('[CORS] Enabled with options:', corsOptions);
 
 
 /* ---------------------------- CORE MIDDLEWARES -------------------------- */
