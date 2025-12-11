@@ -69,18 +69,52 @@ const seoInjectionVitePlugin = () => {
               );
             }
 
-            // 5. Add keywords meta tag if it doesn't exist
-            if (seoData.keywords && !html.includes('name="keywords"')) {
-              const headClosingIndex = html.indexOf('</head>');
-              if (headClosingIndex !== -1) {
-                html = html.slice(0, headClosingIndex) +
-                  `    <meta name="keywords" content="${seoData.keywords.replace(/"/g, '&quot;')}" />\n` +
-                  html.slice(headClosingIndex);
+            // 5. Add/replace keywords meta tag
+            if (seoData.keywords) {
+              if (html.includes('name="keywords"')) {
+                html = html.replace(
+                  /<meta\s+name="keywords"\s+content="[^"]*"\s*\/?>/i,
+                  `<meta name="keywords" content="${seoData.keywords.replace(/"/g, '&quot;')}" />`
+                );
+              } else {
+                const headClosingIndex = html.indexOf('</head>');
+                if (headClosingIndex !== -1) {
+                  html = html.slice(0, headClosingIndex) +
+                    `    <meta name="keywords" content="${seoData.keywords.replace(/"/g, '&quot;')}" />\n` +
+                    html.slice(headClosingIndex);
+                }
               }
-            } else if (seoData.keywords) {
+            }
+
+            // 6. Add/replace twitter:title
+            if (html.includes('name="twitter:title"')) {
               html = html.replace(
-                /<meta\s+name="keywords"\s+content="[^"]*"\s*\/?>/i,
-                `<meta name="keywords" content="${seoData.keywords.replace(/"/g, '&quot;')}" />`
+                /<meta\s+name="twitter:title"\s+content="[^"]*"\s*\/?>/i,
+                `<meta name="twitter:title" content="${seoData.ogTitle.replace(/"/g, '&quot;')}" />`
+              );
+            }
+
+            // 7. Add/replace twitter:description
+            if (html.includes('name="twitter:description"')) {
+              html = html.replace(
+                /<meta\s+name="twitter:description"\s+content="[^"]*"\s*\/?>/i,
+                `<meta name="twitter:description" content="${seoData.ogDescription.replace(/"/g, '&quot;')}" />`
+              );
+            }
+
+            // 8. Add/replace og:image
+            if (html.includes('property="og:image"')) {
+              html = html.replace(
+                /<meta\s+property="og:image"\s+content="[^"]*"\s*\/?>/i,
+                `<meta property="og:image" content="${seoData.ogImage.replace(/"/g, '&quot;')}" />`
+              );
+            }
+
+            // 9. Add/replace canonical link
+            if (html.includes('rel="canonical"')) {
+              html = html.replace(
+                /<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>/i,
+                `<link rel="canonical" href="${seoData.canonicalUrl.replace(/"/g, '&quot;')}" />`
               );
             }
 
