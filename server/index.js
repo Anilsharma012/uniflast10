@@ -73,14 +73,15 @@ app.use((req, _res, next) => {
 });
 
 /* -------------------------------- CORS --------------------------------- */
-// Allow all origins for development
-app.use(cors({
+// Disable CORS restrictions for development
+const corsOptions = {
   origin: '*',
   credentials: false,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  maxAge: 86400,
-}));
+};
+app.use(cors(corsOptions));
+console.log('[CORS] Enabled with options:', corsOptions);
 
 
 /* ---------------------------- CORE MIDDLEWARES -------------------------- */
